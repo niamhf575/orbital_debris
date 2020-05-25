@@ -14,7 +14,7 @@ def process_data(file_name):
         lines = f.readlines()
 
     with open('processed.csv', "w") as f:
-        titles = "SatelliteCatalogNumber,ElsetClassification,InternationalDesignator,ElementSetEpoch(UTC),1stDerivativeMeanMotion,2ndDerivativeMeanMotion,b*DragTerm,ElementSetType,ElementNumber,Checksum,OrbitInclination,Eccentricity,ArgumentofPerigee,MeanAnomaly,MeanMotion,RevolutionNumberatEpoch,Checksum(2)"
+        titles = "SatelliteCatalogNumber,ElsetClassification,InternationalDesignator,ElementSetEpoch(UTC),1stDerivativeMeanMotion,2ndDerivativeMeanMotion,b*DragTerm,ElementSetType,ElementNumber,Checksum,OrbitInclination,RightAscension,Eccentricity,ArgumentofPerigee,MeanAnomaly,MeanMotion,RevolutionNumberatEpoch,Checksum(2)"
         print(titles, file=f)
         word_line = ""
         for line in lines:
@@ -30,6 +30,8 @@ def process_data(file_name):
                     words.append(line[44:52])
                     words.append(line[53:61])
                     words.append(line[62])
+                    words.append(line[64:68])
+                    words.append(line[68])
                     word_line = word_line + words[0].strip()
                     words = words[1:]
             else:
