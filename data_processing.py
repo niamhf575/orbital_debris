@@ -60,6 +60,7 @@ def get_year(epoch):
         year = year + 2000
     return year
 
+# def probablity_calc 
 
 def main():
     df = process_data('test.txt')
