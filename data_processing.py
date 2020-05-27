@@ -60,7 +60,6 @@ def get_year(epoch):
         year = year + 2000
     return year
 
-# def probablity_calc 
 
 def main():
     df = process_data('test.txt')
@@ -68,6 +67,6 @@ def main():
     #print(df)
     #df['year'] = df['ElementSetEpoch(UTC)'].apply(get_year)
     #print(df['year'])
-
+    
 if __name__ == '__main__':
     main()
