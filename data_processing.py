@@ -45,7 +45,7 @@ def process_data(file_name):
                 words.append(line[68])
             #words = words[2:] 
             for word in words:
-                word_line = word_line + ", "+ word.strip()
+                word_line = word_line + ","+ word.strip()
             if line_number == 2:
                 print(word_line, file=f)
                 word_line = ""
@@ -59,6 +59,7 @@ def get_year(epoch):
     else:
         year = year + 2000
     return year
+
 
 # def probablity_calc 
 
