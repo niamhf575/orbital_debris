@@ -23,12 +23,30 @@ def semimajor_calc(df):
     return df
 
 
-def main():
-    df = dp.process_data('test.txt')
-    
+def probability_calc(df):
+    a0 = 300
     df = semimajor_calc(df)
 
-    df.to_csv('semimajor.csv')
+    a = df['SemiMajorAxis']
+    e = df['Eccentricity']
+    i = df['OrbitInclination'] * math.pi / 180
+
+    df['U'] = (3 - a0 / a - 2 * ((a * (1 - e ** 2))/ a0) ** 0.5 * math.cos(i)) ** 0.5
+    df['Ux'] = (2 - a0 / a - a(1 - e ** 2)/ a0) ** 0.5
+
+    U = df['U']
+    Ux = df['Ux']
+    df['Probablity'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * math.sin(i))
+
+    return df
+
+def main():
+
+    df = dp.process_data('test.txt')
+    
+    df = probability_calc(df)
+
+    df.to_csv('probability.csv')
 
 if __name__ == "__main__":
     main()

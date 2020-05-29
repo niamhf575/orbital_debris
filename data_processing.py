@@ -4,7 +4,8 @@ should remove excess whitespace from words
 """
 import pandas as pd 
 import numpy as np
-from data_viz import total_bar_stacked, total_line_and_bar_plot
+# from data_viz import total_bar_stacked, total_line_and_bar_plot
+
 
 def process_data(file_name):
     """
@@ -107,7 +108,6 @@ def get_launch_year_tally(data):
     headers = ['Year', 'Total', 'Count']
     return pd.DataFrame(data, columns = headers)
 
-# def probablity_calc 
 
 def main():
     df = process_data('test.txt')
