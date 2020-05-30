@@ -4,7 +4,6 @@ should remove excess whitespace from words
 """
 import pandas as pd 
 import numpy as np
-from data_viz import total_bar_stacked, total_line_and_bar_plot
 
 def process_data(file_name):
     """
@@ -64,53 +63,10 @@ def get_year(epoch):
     return year
 
 
-def get_launch_year(n):
-    """
-    returns launch year as an int from international designator
-    """
-    if n is np.NaN:
-        return n
-    year = int(n[0:2])
-    if year>= 57:
-        year = year + 1900
-    else:
-        year = year + 2000
-    return year
-
-def get_launch_years_column(data):
-    '''
-    adds a launch year column to the dataframe
-    (returns a new dataframe)
-    NaN remains NaN
-    '''
-    data = data.copy()
-    data['LaunchYear'] = data['InternationalDesignator'].apply(get_launch_year)
-    return data
-
-
-def get_launch_year_tally(data):
-    '''
-    input is a dataframe
-    returns a dataframe with columns
-    'Years', 'Count' (# of objects launched that year),
-    'Total' (sum of counts up to that year)
-    '''
-    data = data['InternationalDesignator']
-    data = data.dropna()
-    data = data.apply(get_launch_year)
-    data = data.groupby(data).count()
-    data  = dict(data)
-    data = sorted([(key, data[key]) for key in data.keys()], key = lambda t: t[0])
-    data[0] = (data[0][0], data[0][1], data[0][1])
-    for i in range(1, len(data)):
-        data[i]= (data[i][0], data[i][1] + data[i-1][1], data[i][1])
-    headers = ['Year', 'Total', 'Count']
-    return pd.DataFrame(data, columns = headers)
-
-# def probablity_calc 
-
 def main():
     df = process_data('test.txt')
+    #print(np.array(list(df['ElsetClassification'])))
+
     
 
 if __name__ == '__main__':
