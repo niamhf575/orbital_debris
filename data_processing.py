@@ -38,7 +38,7 @@ def process_data(file_name):
             else:
                 words.append(line[8:16])
                 words.append(line[17:25])
-                words.append(line[26:33])
+                words.append('0.'+line[26:33])
                 words.append(line[34:42])
                 words.append(line[43:51])
                 words.append(line[52:63])
@@ -66,6 +66,7 @@ def get_year(epoch):
 def main():
     df = process_data('test.txt')
     #print(np.array(list(df['ElsetClassification'])))
+    print(df['Eccentricity'])
 
     
 

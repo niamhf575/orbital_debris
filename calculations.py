@@ -5,6 +5,7 @@ Performs Various Calculations from pulled data in data_processing
 import data_processing as dp 
 import math
 import pandas as pd 
+import numpy as np
 
 
 def semimajor_calc(df):
@@ -30,13 +31,14 @@ def probability_calc(df):
     a = df['SemiMajorAxis']
     e = df['Eccentricity']
     i = df['OrbitInclination'] * math.pi / 180
-
-    df['U'] = (3 - a0 / a - 2 * ((a * (1 - e ** 2))/ a0) ** 0.5 * math.cos(i)) ** 0.5
-    df['Ux'] = (2 - a0 / a - a(1 - e ** 2)/ a0) ** 0.5
+    
+    df['U'] = (3 - a0 / a - 2 * ((a * (1 - e ** 2))/ a0) ** 0.5 * np.cos(i)) ** 0.5
+    # if you write a(something) python thinks you are trying to call a, needs to be a*(something)
+    df['Ux'] = (2 - a0 / a - a*(1 - e ** 2)/ a0) ** 0.5
 
     U = df['U']
     Ux = df['Ux']
-    df['Probablity'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * math.sin(i))
+    df['Probablity'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * np.sin(i))
 
     return df
 
@@ -47,6 +49,8 @@ def main():
     df = probability_calc(df)
 
     df.to_csv('probability.csv')
+
+    print('Probability Finished!')
 
 if __name__ == "__main__":
     main()
