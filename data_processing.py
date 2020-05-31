@@ -2,8 +2,9 @@
 put 2-line element data from a txt file into a pandas data frame
 should remove excess whitespace from words
 """
-import pandas as pd 
+import pandas as pd
 import numpy as np
+
 
 def process_data(file_name):
     """
@@ -22,19 +23,19 @@ def process_data(file_name):
             words = []
             line_number = int(line[0])
             if line_number == 1:
-                    #words.apppend(line[0])
-                    words.append(line[2:7])
-                    words.append(line[7])
-                    words.append(line[9:17])
-                    words.append(line[18:32])
-                    words.append(line[33:43])
-                    words.append(line[44:52])
-                    words.append(line[53:61])
-                    words.append(line[62])
-                    words.append(line[64:68])
-                    words.append(line[68])
-                    word_line = word_line + words[0].strip()
-                    words = words[1:]
+                # words.apppend(line[0])
+                words.append(line[2:7])
+                words.append(line[7])
+                words.append(line[9:17])
+                words.append(line[18:32])
+                words.append(line[33:43])
+                words.append(line[44:52])
+                words.append(line[53:61])
+                words.append(line[62])
+                words.append(line[64:68])
+                words.append(line[68])
+                word_line = word_line + words[0].strip()
+                words = words[1:]
             else:
                 words.append(line[8:16])
                 words.append(line[17:25])
@@ -44,9 +45,9 @@ def process_data(file_name):
                 words.append(line[52:63])
                 words.append(line[63:68])
                 words.append(line[68])
-            #words = words[2:] 
+            # words = words[2:]
             for word in words:
-                word_line = word_line + ","+ word.strip()
+                word_line = word_line + "," + word.strip()
             if line_number == 2:
                 print(word_line, file=f)
                 word_line = ""
@@ -56,7 +57,7 @@ def process_data(file_name):
 
 def get_year(epoch):
     year = int(epoch//1000)
-    if year>= 57:
+    if year >= 57:
         year = year + 1900
     else:
         year = year + 2000
@@ -65,10 +66,9 @@ def get_year(epoch):
 
 def main():
     df = process_data('test.txt')
-    #print(np.array(list(df['ElsetClassification'])))
+    # print(np.array(list(df['ElsetClassification'])))
     print(df['Eccentricity'])
 
-    
 
 if __name__ == '__main__':
     main()
