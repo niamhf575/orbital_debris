@@ -51,7 +51,11 @@ def process_data(file_name):
             if line_number == 2:
                 print(word_line, file=f)
                 word_line = ""
+    
     df = pd.read_csv('processed.csv')
+    
+    # df = eccentricity_fix(df)
+
     return df
 
 
@@ -62,6 +66,16 @@ def get_year(epoch):
     else:
         year = year + 2000
     return year
+
+
+def eccentricity_fix(df):
+    e = df['Eccentricity']
+    
+    str_e = str(e)
+
+    df['Eccentricity'] = float('.' + str_e)
+
+    return df
 
 
 def main():

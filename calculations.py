@@ -25,7 +25,7 @@ def semimajor_calc(df):
 
 
 def probability_calc(df):
-    a0 = 300
+    a0 = 408 + 6371
     df = semimajor_calc(df)
 
     a = df['SemiMajorAxis']
@@ -38,9 +38,15 @@ def probability_calc(df):
 
     U = df['U']
     Ux = df['Ux']
-    df['Probablity'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * np.sin(i))
-
-    return df
+    # print(U)
+    # print(Ux)
+    # print(a0/a)
+    # print(a*(1-e**2)/a0)
+    # print(a.min())
+    df['Probability'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * np.sin(i))
+    print(df['Probability'])
+    print(df.dropna())
+    return df.dropna()
 
 
 def main():
