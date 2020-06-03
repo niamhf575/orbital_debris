@@ -23,19 +23,20 @@ def process_data(file_name):
             words = []
             line_number = int(line[0])
             if line_number == 1:
-                # words.apppend(line[0])
-                words.append(line[2:7])
-                words.append(line[7])
-                words.append(line[9:17])
-                words.append(line[18:32])
-                words.append(line[33:43])
-                words.append(line[44:52])
-                words.append(line[53:61])
-                words.append(line[62])
-                words.append(line[64:68])
-                words.append(line[68])
-                word_line = word_line + words[0].strip()
-                words = words[1:]
+                    # this has to be done because lots of the values in the text file are not separated by spaces, 
+                    # or anything consistent other than position
+                    words.append(line[2:7])
+                    words.append(line[7])
+                    words.append(line[9:17])
+                    words.append(line[18:32])
+                    words.append(line[33:43])
+                    words.append(line[44:52])
+                    words.append(line[53:61])
+                    words.append(line[62])
+                    words.append(line[64:68])
+                    words.append(line[68])
+                    word_line = word_line + words[0].strip()
+                    words = words[1:]
             else:
                 words.append(line[8:16])
                 words.append(line[17:25])
@@ -58,16 +59,18 @@ def process_data(file_name):
 
     return df
 
-
+'''
+don't think we'll end up using this
 def get_year(epoch):
     year = int(epoch//1000)
     if year >= 57:
         year = year + 1900
     else:
         year = year + 2000
-    return year
+    return year'''
 
-
+'''
+shouldn't need this since I fixed it in proccess data see line 41
 def eccentricity_fix(df):
     e = df['Eccentricity']
     
@@ -77,12 +80,11 @@ def eccentricity_fix(df):
 
     return df
 
+'''
+
 
 def main():
-    df = process_data('test.txt')
-    # print(np.array(list(df['ElsetClassification'])))
-    print(df['Eccentricity'])
-
+    df = process_data('test.txt')    
 
 if __name__ == '__main__':
     main()

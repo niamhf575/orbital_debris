@@ -1,3 +1,8 @@
+"""
+This file contains our main data analysis,
+including polynomial fit functions for
+count and probability 
+"""
 import numpy as np
 import pandas as pd
 from data_processing import process_data
@@ -9,6 +14,7 @@ from calculations import probability_calc
 def get_launch_year(n):
     """
     returns launch year as an int from international designator
+    leaves NaN values as NaN
     """
     if n is np.NaN:
         return n
@@ -23,8 +29,10 @@ def get_launch_year(n):
 def get_launch_years_column(data):
     '''
     adds a launch year column to the dataframe
+    column 'LaunchYear'
     (returns a new dataframe)
-    NaN remains NaN
+    NaN in InternationalDesignator remains NaN
+    in LaunchYear
     '''
     data = data.copy()
     data['LaunchYear'] = data['InternationalDesignator'].apply(get_launch_year)
@@ -54,6 +62,15 @@ def get_launch_year_tally(data):
 
 
 def polynomial_fit_count(data):
+    """
+    from a dataframe, makes a polynomial
+    best fit model of the count of objects
+    per year. Creates a plot of the model
+    overtop a scatter plot of the data points.
+    Prints some information about the model,
+    includung the R-squared value. Creates a
+    plot of the residuals.
+    """
     # get the data in the right format
     data = get_launch_year_tally(data)
     x = np.array(list(data['Year']))
@@ -61,27 +78,32 @@ def polynomial_fit_count(data):
     # create the model
     count_func = np.poly1d(np.polyfit(x, y, 2))
     # plot the scatter plot & line of best fit
+    fig, ax = plt.subplots(1)
     plt.scatter(x, y)
     line = np.linspace(1958, 2020, 18000)
     plt.scatter(x, y)
     plt.plot(line, count_func(line))
-    plt.savefig('poly_reg.png')
+    fig.savefig('poly_fit_count.png')
     # print some information about the model
     print('Polynomial fit for number of objects:')
     print('Eq: ')
     print(count_func)
     print('R-squared: ', r2_score(y, count_func(x)))
     # plot the residuals
+    fig, ax = plt.subplots(1)
     res = y - count_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res')
-    plt.savefig('poly_res.png')
+    df.plot(kind='scatter', x='x', y='res',ax=ax)
+    fig.savefig('count_residuals.png')
 
 
 def get_probability_tally(data):
     '''
-
+    input is a dataframe
+    returns a dataframe with columns
+    'LaunchYear', 'Probabilty' (total probability 
+    of impact for that year),
     '''
     data = probability_calc(data)
     data = get_launch_years_column(data)
@@ -89,53 +111,50 @@ def get_probability_tally(data):
     data = data.groupby(['LaunchYear'], as_index=False).sum()
     for i in range(1, len(data)):
         data.loc[i, 'Probability'] += data.loc[i-1, 'Probability']
-    # print(data)
     return data
-    '''data = sorted(
-        [(key, data[key]) for key in data.keys()], key = lambda t: t[0]
-        )
-    data[0] = (data[0][0], data[0][1], data[0][1])
-    for i in range(1, len(data)):
-        data[i]= (data[i][0], data[i][1] + data[i-1][1], data[i][1])
-    headers = ['Year', 'Total', 'Count']
-    return pd.DataFrame(data, columns = headers)
-    return data'''
-
-# def probablity_calc
 
 
 def polynomial_fit_probability(data):
+    """
+    from a dataframe, makes a polynomial
+    best fit model of the probability of impact
+    per year. Creates a plot of the model
+    overtop a scatter plot of the data points.
+    Prints some information about the model,
+    includung the R-squared value. Creates a
+    plot of the residuals.
+    """
     # get the data in the right format
     data = get_probability_tally(data)
     x = np.array(list(data['LaunchYear']))
     y = np.array(list(data['Probability']))
     # create the model
-    count_func = np.poly1d(np.polyfit(x, y, 2))
+    prob_func = np.poly1d(np.polyfit(x, y, 2))
     # plot the scatter plot & line of best fit
-    plt.scatter(x, y)
-    line = np.linspace(1963, 2020, 6)
-    warn = (line*0)+(1/10000)
-    # plt.plot(line,warn,'-r')
+    # plt.scatter(x, y)
+    fig, ax = plt.subplots(1)
     plt.scatter(x, y, color='lightblue')
-    plt.plot(line, count_func(line))
-    plt.plot(line, warn, '-r')
-    plt.savefig('probability_fit_line.png')
+    line = np.linspace(1963, 2020, 6)
+    plt.plot(line, prob_func(line))
+    fig.savefig('poly_fit_probability.png')
     # print some information about the model
+    print()
     print('Polynomial fit for probability:')
     print('Eq: ')
-    print(count_func)
-    print('R-squared: ', r2_score(y, count_func(x)))
+    print(prob_func)
+    print('R-squared: ', r2_score(y, prob_func(x)))
     # plot the residuals
-    res = y - count_func(x)
+    fig, ax = plt.subplots(1)
+    res = y - prob_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res')
-    plt.savefig('prob_residuals.png')
+    df.plot(kind='scatter', x='x', y='res', ax=ax)
+    fig.savefig('probability_residuals.png')
 
 
 def main():
     df = process_data('test.txt')
-    # polynomial_fit_count(df)
+    polynomial_fit_count(df)
     polynomial_fit_probability(df)
 
 
