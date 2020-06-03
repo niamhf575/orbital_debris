@@ -33,7 +33,6 @@ def probability_calc(df):
     i = df['OrbitInclination'] * math.pi / 180
     
     df['U'] = (3 - a0 / a - 2 * ((a * (1 - e ** 2)) / a0) ** 0.5 * np.cos(i)) ** 0.5
-    # if you write a(something) python thinks you are trying to call a, needs to be a*(something)
     df['Ux'] = (2 - a0 / a - a*(1 - e ** 2) / a0) ** 0.5
 
     U = df['U']
