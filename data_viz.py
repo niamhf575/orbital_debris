@@ -2,6 +2,10 @@ import pandas as pd
 from data_processing import process_data
 import matplotlib.pyplot as plt
 import seaborn as sns
+from astropy import units as u
+from poliastro.bodies import Earth
+from poliastro.twobody import Orbit
+from poliastro.plotting import StaticOrbitPlotter
 
 sns.set()
 
@@ -97,12 +101,31 @@ def total_bar_stacked(data):
     fig.savefig('stacked_bar.png')
 
 
+def orbit_plot():
+    """This function plots the boundaries of Low Earth Orbit (LEO), Medium Earth
+    Orbit (MEO), Geosyncronous Orbit (GEO) and High Earth Orbit.
+    """
+
+    # LEO boundary
+    LEO_orb = Orbit.circular(Earth, alt=2000 * u.km)
+    # MEO boundary
+    MEO_orb = Orbit.circular(Earth, alt=35786 * u.km)
+
+    fig, ax = plt.subplots(figsize=(17, 10))
+    op = StaticOrbitPlotter(ax)
+    op.plot(LEO_orb, label='LEO/MEO Boundary')
+    op.plot(MEO_orb, label='MEO/GEO Boundary')
+    ax.set_title('Geocentric Orbit Boundaries')
+    plt.savefig('orbit_fig.png')
+
+
 def main():
     data = process_data('test.txt')
     # line_plot(data)
     # bar_plot(data)
     # total_line_and_bar_plot(data)
     total_bar_stacked(data)
+    orbit_plot()
 
 
 if __name__ == '__main__':

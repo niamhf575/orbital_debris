@@ -13,11 +13,12 @@ def get_launch_year(n):
     if n is np.NaN:
         return n
     year = int(n[0:2])
-    if year>= 57:
+    if year >= 57:
         year = year + 1900
     else:
         year = year + 2000
     return year
+
 
 def get_launch_years_column(data):
     '''
@@ -42,7 +43,9 @@ def get_launch_year_tally(data):
     data = data.apply(get_launch_year)
     data = data.groupby(data).count()
     data = dict(data)
-    data = sorted([(key, data[key]) for key in data.keys()], key=lambda t: t[0])
+    data = sorted(
+        [(key, data[key]) for key in data.keys()], key=lambda t: t[0]
+        )
     data[0] = (data[0][0], data[0][1], data[0][1])
     for i in range(1, len(data)):
         data[i] = (data[i][0], data[i][1] + data[i-1][1], data[i][1])
@@ -88,7 +91,9 @@ def get_probability_tally(data):
         data.loc[i, 'Probability'] += data.loc[i-1, 'Probability']
     # print(data)
     return data
-    '''data = sorted([(key, data[key]) for key in data.keys()], key = lambda t: t[0])
+    '''data = sorted(
+        [(key, data[key]) for key in data.keys()], key = lambda t: t[0]
+        )
     data[0] = (data[0][0], data[0][1], data[0][1])
     for i in range(1, len(data)):
         data[i]= (data[i][0], data[i][1] + data[i-1][1], data[i][1])
