@@ -10,6 +10,7 @@ from astropy import units as u
 from poliastro.bodies import Earth
 from poliastro.twobody import Orbit
 from poliastro.plotting import StaticOrbitPlotter
+from data_analysis import get_launch_year, get_launch_year_tally
 
 sns.set()
 
