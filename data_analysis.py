@@ -41,13 +41,14 @@ def get_launch_year_tally(data):
     data = data.dropna()
     data = data.apply(get_launch_year)
     data = data.groupby(data).count()
-    data  = dict(data)
-    data = sorted([(key, data[key]) for key in data.keys()], key = lambda t: t[0])
+    data = dict(data)
+    data = sorted([(key, data[key]) for key in data.keys()], key=lambda t: t[0])
     data[0] = (data[0][0], data[0][1], data[0][1])
     for i in range(1, len(data)):
-        data[i]= (data[i][0], data[i][1] + data[i-1][1], data[i][1])
+        data[i] = (data[i][0], data[i][1] + data[i-1][1], data[i][1])
     headers = ['Year', 'Total', 'Count']
-    return pd.DataFrame(data, columns = headers)
+    return pd.DataFrame(data, columns=headers)
+
 
 def polynomial_fit_count(data):
     # get the data in the right format
@@ -66,26 +67,26 @@ def polynomial_fit_count(data):
     print('Polynomial fit for number of objects:')
     print('Eq: ')
     print(count_func)
-    print('R-squared: ',r2_score(y, count_func(x)))
+    print('R-squared: ', r2_score(y, count_func(x)))
     # plot the residuals
     res = y - count_func(x)
-    d = {'x':x, 'res':res}
+    d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind = 'scatter', x='x', y='res')
+    df.plot(kind='scatter', x='x', y='res')
     plt.savefig('poly_res.png')
 
 
 def get_probability_tally(data):
     '''
-    
+
     '''
     data = probability_calc(data)
     data = get_launch_years_column(data)
     data = data[['LaunchYear', 'Probability']]
     data = data.groupby(['LaunchYear'], as_index=False).sum()
-    for i in range(1,len(data)):
-        data.loc[i,'Probability'] += data.loc[i-1, 'Probability']
-    #print(data)
+    for i in range(1, len(data)):
+        data.loc[i, 'Probability'] += data.loc[i-1, 'Probability']
+    # print(data)
     return data
     '''data = sorted([(key, data[key]) for key in data.keys()], key = lambda t: t[0])
     data[0] = (data[0][0], data[0][1], data[0][1])
@@ -95,7 +96,8 @@ def get_probability_tally(data):
     return pd.DataFrame(data, columns = headers)
     return data'''
 
-# def probablity_calc 
+# def probablity_calc
+
 
 def polynomial_fit_probability(data):
     # get the data in the right format
@@ -108,21 +110,21 @@ def polynomial_fit_probability(data):
     plt.scatter(x, y)
     line = np.linspace(1963, 2020, 6)
     warn = (line*0)+(1/10000)
-    #plt.plot(line,warn,'-r')
-    plt.scatter(x, y, color = 'lightblue')
+    # plt.plot(line,warn,'-r')
+    plt.scatter(x, y, color='lightblue')
     plt.plot(line, count_func(line))
-    plt.plot(line,warn,'-r')
+    plt.plot(line, warn, '-r')
     plt.savefig('probability_fit_line.png')
     # print some information about the model
     print('Polynomial fit for probability:')
     print('Eq: ')
     print(count_func)
-    print('R-squared: ',r2_score(y, count_func(x)))
+    print('R-squared: ', r2_score(y, count_func(x)))
     # plot the residuals
     res = y - count_func(x)
-    d = {'x':x, 'res':res}
+    d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind = 'scatter', x='x', y='res')
+    df.plot(kind='scatter', x='x', y='res')
     plt.savefig('prob_residuals.png')
 
 
@@ -130,8 +132,7 @@ def main():
     df = process_data('test.txt')
     # polynomial_fit_count(df)
     polynomial_fit_probability(df)
-    
-    
+
 
 if __name__ == '__main__':
     main()

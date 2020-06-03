@@ -2,8 +2,9 @@
 put 2-line element data from a txt file into a pandas data frame
 should remove excess whitespace from words
 """
-import pandas as pd 
+import pandas as pd
 import numpy as np
+
 
 def process_data(file_name):
     """
@@ -45,9 +46,9 @@ def process_data(file_name):
                 words.append(line[52:63])
                 words.append(line[63:68])
                 words.append(line[68])
-            #words = words[2:] 
+            # words = words[2:]
             for word in words:
-                word_line = word_line + ","+ word.strip()
+                word_line = word_line + "," + word.strip()
             if line_number == 2:
                 print(word_line, file=f)
                 word_line = ""
@@ -62,7 +63,7 @@ def process_data(file_name):
 don't think we'll end up using this
 def get_year(epoch):
     year = int(epoch//1000)
-    if year>= 57:
+    if year >= 57:
         year = year + 1900
     else:
         year = year + 2000
