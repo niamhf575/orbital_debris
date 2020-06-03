@@ -147,6 +147,7 @@ def polynomial_fit_probability(data):
     df = pd.DataFrame(d)
     df.plot(kind='scatter', x='x', y='res', ax=ax)
     fig.savefig('probability_residuals.png')
+    # something
 
 
 def main():
