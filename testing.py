@@ -3,6 +3,7 @@ import calculations as calcs
 from data_processing import process_data
 # import data_viz
 from utils import assert_equals
+import pandas as pd
 
 def  test_data_processing(data_file):
     """
@@ -21,7 +22,30 @@ def  test_data_processing(data_file):
     assert_equals(14.88449574, data['MeanMotion'].loc[1])
     assert_equals(98.4577, data['OrbitInclination'].loc[0])
     assert_equals(58.3055, data['OrbitInclination'].loc[1])
-    
+
+
+def test_launch_years_column(df):
+    '''
+    tests the get_launch_year_column 
+    function from data_analysis.py 
+    (this tests get_launch_year function
+    at the same time since they rely on
+    each other)
+    '''
+    df = data_analysis.get_launch_years_column(df)
+    assert_equals(1962, df['LaunchYear'].loc[0])
+    assert_equals(1962, df['LaunchYear'].loc[1])
+
+def test_get_launch_year_tally():
+    '''
+    tests get_launch_year_tally from data_analysis.py
+    '''
+    data = {'InternationalDesignator':['02','02', '01', '03', '67', '67', '91']}
+    headers = ['InternationalDesignator']
+    data = pd.DataFrame(data, columns = headers)
+    data = data_analysis.get_launch_year_tally(data)
+    assert_equals([2,3,4,6,7], list(data['Total']))
+    assert_equals([2,1,1,2,1], list(data['Count']))
 
 def test_calcs(data_file):
 
@@ -38,6 +62,11 @@ def test_calcs(data_file):
 def main():
     test_data_processing('test_process_data.txt')    
     test_calcs('test.txt')
+    test_df = process_data('test_process_data.txt')
+    test_data_processing('test_process_data.txt')  
+    test_launch_years_column(test_df) 
+    test_get_launch_year_tally()
+    print('Success!!!!!')
 
 if __name__ == '__main__':
     main()
