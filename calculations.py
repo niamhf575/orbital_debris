@@ -48,6 +48,47 @@ def probability_calc(df):
     return df.dropna()
 
 
+def get_altitude_columns(data):
+    """
+    returns a new dataframe
+    with altitude columns 'Periapsis'
+    and 'Apoapsis'
+    """
+    data = data.copy()
+    data = semimajor_calc(data)
+    radius_earth = 6378
+    a = data['SemiMajorAxis']
+    e = data['Eccentricity']
+    r_p = a * (1 - e)
+    r_a = (2 * a) - r_p
+    z_p = r_p - radius_earth
+    z_a = r_a - radius_earth
+    data['Periapsis'] = z_p
+    data['Apoapsis'] = z_a
+    return data
+
+
+def get_orbit_columns(data):
+    """
+    returns a new dataframe
+    with altitude columns 'Periapsis'
+    and 'Apoapsis' in addition to a column
+    with True/False values for whether
+    that object's orbit passes through 
+    LEO, MEO, GEO, or high earth orbit
+    each object may pass through mulitple orbits.
+    """
+    data = get_altitude_columns(data)
+    data['LEO'] = (data['Periapsis'] <= 2000) | (data['Apoapsis'] <= 2000)
+    data['MEO'] = ((data['Periapsis'] > 2000) & (data['Periapsis'] < 35786))|((data['Apoapsis'] > 2000) & (data['Apoapsis'] < 35786))
+    touches_geo_at_zp_or_za = (data['Periapsis'] == 35786) | (data['Apoapsis'] == 35786)
+    touches_geo_btwn_zpza = (data['Periapsis'] < 35786) & (data['Apoapsis'] > 35786)
+    data['GEO'] = touches_geo_at_zp_or_za | touches_geo_btwn_zpza
+    data['HighEarthOrbit'] = (data['Periapsis'] > 35786) | (data['Apoapsis'] > 35786)
+    return data
+
+
+
 def main():
 
     df = dp.process_data('test.txt')

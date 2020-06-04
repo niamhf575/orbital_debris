@@ -8,7 +8,7 @@ import pandas as pd
 from data_processing import process_data
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
-from calculations import probability_calc
+from calculations import probability_calc, get_orbit_columns
 
 
 def get_launch_year(n):
@@ -153,10 +153,26 @@ def polynomial_fit_probability(data):
     # something
 
 
+def get_orbit_tally(data, orbit, pre = True):
+    """
+    set pre = False if you already added orbit columns to data
+    tallys up the count of objects per year in orbit 
+    """
+    if pre:
+        data = get_launch_years_column(data)
+        data = get_orbit_columns(data)
+    data = data[data[orbit]]
+    data = data[['LaunchYear', orbit]]
+    data = data.groupby(['LaunchYear'], as_index=False).count()
+    for i in range(1, len(data)):
+        data.loc[i, orbit] += data.loc[i-1, orbit]
+    return data
+
 def main():
     df = process_data('test.txt')
-    polynomial_fit_count(df)
-    polynomial_fit_probability(df)
+    #polynomial_fit_count(df)
+    #polynomial_fit_probability(df)
+    get_orbit_tally(df, 'GEO')
 
 
 if __name__ == '__main__':

@@ -59,29 +59,6 @@ def process_data(file_name):
 
     return df
 
-'''
-don't think we'll end up using this
-def get_year(epoch):
-    year = int(epoch//1000)
-    if year >= 57:
-        year = year + 1900
-    else:
-        year = year + 2000
-    return year'''
-
-'''
-shouldn't need this since I fixed it in proccess data see line 41
-def eccentricity_fix(df):
-    e = df['Eccentricity']
-    
-    str_e = str(e)
-
-    df['Eccentricity'] = float('.' + str_e)
-
-    return df
-
-'''
-
 
 def main():
     df = process_data('test.txt')    
