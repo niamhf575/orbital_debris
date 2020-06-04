@@ -12,7 +12,8 @@ from poliastro.bodies import Earth
 from poliastro.twobody import Orbit
 from poliastro.plotting import StaticOrbitPlotter
 
-from data_analysis import get_launch_year, get_launch_year_tally, get_orbit_tally, get_launch_years_column
+from data_analysis import get_launch_year, get_launch_year_tally
+from data_analysis import get_orbit_tally, get_launch_years_column
 from calculations import get_orbit_columns
 
 sns.set()
@@ -107,31 +108,37 @@ def compare_years_by_orbit(data):
     data = get_orbit_columns(data)
     data_LEO = get_orbit_tally(data, 'LEO', False)
     data_MEO = get_orbit_tally(data, 'MEO', False)
-    data_GEO = get_orbit_tally(data,'GEO', False)
+    data_GEO = get_orbit_tally(data, 'GEO', False)
     data_HEO = get_orbit_tally(data, 'HighEarthOrbit', False)
-    
-    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4 , figsize=(17, 17)) 
-    
-    data_LEO.plot(kind='bar', y='LEO', x='LaunchYear', ax = ax1)
-    
-    data_MEO.plot(kind='bar', y='MEO', x='LaunchYear', ax = ax2)
-    
-    data_GEO.plot(kind='bar', y='GEO', x='LaunchYear', ax = ax3)
-    
-    data_HEO.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax = ax4)
 
-    df = data_LEO.merge(data_MEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
-    df = df.merge(data_GEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
-    df = df.merge(data_HEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
-    
+    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4, figsize=(17, 17))
+
+    data_LEO.plot(kind='bar', y='LEO', x='LaunchYear', ax=ax1)
+
+    data_MEO.plot(kind='bar', y='MEO', x='LaunchYear', ax=ax2)
+
+    data_GEO.plot(kind='bar', y='GEO', x='LaunchYear', ax=ax3)
+
+    data_HEO.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax=ax4)
+
+    df = data_LEO.merge(
+        data_MEO, left_on='LaunchYear', right_on='LaunchYear', how='outer'
+        )
+    df = df.merge(
+        data_GEO, left_on='LaunchYear', right_on='LaunchYear', how='outer'
+        )
+    df = df.merge(
+        data_HEO, left_on='LaunchYear', right_on='LaunchYear', how='outer'
+        )
+
     fig.savefig('barcomp.png')
     df = df.fillna(0)
 
-    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4 , figsize=(17, 17)) 
-    df.plot(kind='bar', y='LEO', x='LaunchYear', ax = ax1)
-    df.plot(kind='bar', y='MEO', x='LaunchYear', ax = ax2)
-    df.plot(kind='bar', y='GEO', x='LaunchYear', ax = ax3)
-    df.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax = ax4)
+    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4, figsize=(17, 17))
+    df.plot(kind='bar', y='LEO', x='LaunchYear', ax=ax1)
+    df.plot(kind='bar', y='MEO', x='LaunchYear', ax=ax2)
+    df.plot(kind='bar', y='GEO', x='LaunchYear', ax=ax3)
+    df.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax=ax4)
     fig.savefig('barcomp2.png')
 
     fig, ax = plt.subplots(1)
@@ -141,7 +148,7 @@ def compare_years_by_orbit(data):
     geo = len(data[data['GEO']])
     heo = len(data[data['HighEarthOrbit']])
     y = np.arange(4)
-    x = [leo,meo,geo,heo]
+    x = [leo, meo, geo, heo]
     plt.bar(y, x)
     fig.savefig('a.png')
 
@@ -163,7 +170,6 @@ def compare_by_alt(data):
     plt.xlabel('Altitude grouped by megameters')
     plt.ylabel('Count')
     plt.savefig('scatter2.png')
-    
 
 
 def main():
@@ -173,7 +179,7 @@ def main():
     total_line_and_scatter_plot(data)
     total_bar_stacked(data)
     # orbit_plot()'''
-    #compare_years_by_orbit(data)
+    # compare_years_by_orbit(data)
     compare_by_alt(data)
 
 

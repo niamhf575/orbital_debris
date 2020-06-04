@@ -153,10 +153,10 @@ def polynomial_fit_probability(data):
     # something
 
 
-def get_orbit_tally(data, orbit, pre = True):
+def get_orbit_tally(data, orbit, pre=True):
     """
     set pre = False if you already added orbit columns to data
-    tallys up the count of objects per year in orbit 
+    tallys up the count of objects per year in orbit
     returns a dataframe w/ columns orbit (containing counts)
     and 'LaunchYear', orbit may be LEO, MEO, GEO or HighEarthOrbit
     """
@@ -170,10 +170,11 @@ def get_orbit_tally(data, orbit, pre = True):
         data.loc[i, orbit] += data.loc[i-1, orbit]
     return data
 
+
 def main():
     df = process_data('test.txt')
-    #polynomial_fit_count(df)
-    #polynomial_fit_probability(df)
+    # polynomial_fit_count(df)
+    # polynomial_fit_probability(df)
     get_orbit_tally(df, 'GEO')
 
 

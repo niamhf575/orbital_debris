@@ -19,7 +19,9 @@ def semimajor_calc(df):
     G = 6.673 * (10 ** -11)
     df['OrbitalPeriod'] = 1 / mean_motion * 3600 * 24
     period = df['OrbitalPeriod']
-    df['SemiMajorAxis'] = ((G * M * period ** 2)/(4 * math.pi ** 2)) ** (1/3) / 1000
+    df['SemiMajorAxis'] = (
+        ((G * M * period ** 2)/(4 * math.pi ** 2)) ** (1/3) / 1000
+    )
 
     return df
 
@@ -32,7 +34,9 @@ def probability_calc(df):
     e = df['Eccentricity']
     i = df['OrbitInclination'] * math.pi / 180
 
-    df['U'] = (3 - a0 / a - 2 * ((a * (1 - e ** 2)) / a0) ** 0.5 * np.cos(i)) ** 0.5
+    df['U'] = (
+        (3 - a0 / a - 2 * ((a * (1 - e ** 2)) / a0) ** 0.5 * np.cos(i)) ** 0.5
+    )
     df['Ux'] = (2 - a0 / a - a*(1 - e ** 2) / a0) ** 0.5
 
     U = df['U']
@@ -74,22 +78,32 @@ def get_orbit_columns(data):
     with altitude columns 'Periapsis'
     and 'Apoapsis' in addition to a column
     with True/False values for whether
-    that object's orbit passes through 
+    that object's orbit passes through
     LEO, MEO, GEO, or high earth orbit
     each object may pass through mulitple orbits.
 
     Use data[data[orbit]] with returned dataframe
     to drop rows not in that orbit
     """
-    data = get_altitude_columns(data)
-    data['LEO'] = (data['Periapsis'] <= 2000) | (data['Apoapsis'] <= 2000)
-    data['MEO'] = ((data['Periapsis'] > 2000) & (data['Periapsis'] < 35786))|((data['Apoapsis'] > 2000) & (data['Apoapsis'] < 35786))
-    touches_geo_at_zp_or_za = (data['Periapsis'] == 35786) | (data['Apoapsis'] == 35786)
-    touches_geo_btwn_zpza = (data['Periapsis'] < 35786) & (data['Apoapsis'] > 35786)
-    data['GEO'] = touches_geo_at_zp_or_za | touches_geo_btwn_zpza
-    data['HighEarthOrbit'] = (data['Periapsis'] > 35786) | (data['Apoapsis'] > 35786)
-    return data
 
+    data = get_altitude_columns(data)
+    # LEO
+    data['LEO'] = (data['Periapsis'] <= 2000) | (data['Apoapsis'] <= 2000)
+    # MEO
+    meo_perigee = ((data['Periapsis'] > 2000) & (data['Periapsis'] < 35786))
+    meo_apogee = ((data['Apoapsis'] > 2000) & (data['Apoapsis'] < 35786))
+    data['MEO'] = meo_perigee | meo_apogee
+    touches_geo_at_zp_or_za = (
+        (data['Periapsis'] == 35786) | (data['Apoapsis'] == 35786)
+    )
+    touches_geo_btwn_zpza = (
+        (data['Periapsis'] < 35786) & (data['Apoapsis'] > 35786)
+    )
+    data['GEO'] = touches_geo_at_zp_or_za | touches_geo_btwn_zpza
+    data['HighEarthOrbit'] = (
+        (data['Periapsis'] > 35786) | (data['Apoapsis'] > 35786)
+    )
+    return data
 
 
 def main():
