@@ -77,6 +77,9 @@ def get_orbit_columns(data):
     that object's orbit passes through 
     LEO, MEO, GEO, or high earth orbit
     each object may pass through mulitple orbits.
+
+    Use data[data[orbit]] with returned dataframe
+    to drop rows not in that orbit
     """
     data = get_altitude_columns(data)
     data['LEO'] = (data['Periapsis'] <= 2000) | (data['Apoapsis'] <= 2000)

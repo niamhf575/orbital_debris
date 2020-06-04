@@ -157,6 +157,8 @@ def get_orbit_tally(data, orbit, pre = True):
     """
     set pre = False if you already added orbit columns to data
     tallys up the count of objects per year in orbit 
+    returns a dataframe w/ columns orbit (containing counts)
+    and 'LaunchYear', orbit may be LEO, MEO, GEO or HighEarthOrbit
     """
     if pre:
         data = get_launch_years_column(data)
