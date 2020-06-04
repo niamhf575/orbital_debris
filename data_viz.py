@@ -14,6 +14,7 @@ from data_analysis import get_launch_year, get_launch_year_tally
 
 sns.set()
 
+
 def line_plot(data):
     """
     line plot for count by launch year from dataframe
@@ -46,7 +47,7 @@ def bar_plot(data):
 
 def total_line_and_scatter_plot(data):
     '''
-    creates line and bar plots for the 
+    creates line and bar plots for the
     total count of objects per year
     '''
     data = get_launch_year_tally(data)
@@ -64,8 +65,8 @@ def total_line_and_scatter_plot(data):
 
 def total_bar_stacked(data):
     '''
-    creates a stacked bar chart that shows 
-    the total count of objects per year 
+    creates a stacked bar chart that shows
+    the total count of objects per year
     highlighting the increase each year in
     a different color
     '''

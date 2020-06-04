@@ -1,7 +1,7 @@
 """
 This file contains our main data analysis,
 including polynomial fit functions for
-count and probability 
+count and probability
 """
 import numpy as np
 import pandas as pd
@@ -94,7 +94,7 @@ def polynomial_fit_count(data):
     res = y - count_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res',ax=ax)
+    df.plot(kind='scatter', x='x', y='res', ax=ax)
     fig.savefig('count_residuals.png')
 
 
@@ -102,7 +102,7 @@ def get_probability_tally(data):
     '''
     input is a dataframe
     returns a dataframe with columns
-    'LaunchYear', 'Probabilty' (total probability 
+    'LaunchYear', 'Probabilty' (total probability
     of impact for that year),
     '''
     data = probability_calc(data)
