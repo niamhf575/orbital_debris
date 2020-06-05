@@ -3,7 +3,6 @@ Data visualizations
 to support analysis
 """
 import numpy as np
-import pandas as pd
 from data_processing import process_data
 import matplotlib.pyplot as plt
 import seaborn as sns

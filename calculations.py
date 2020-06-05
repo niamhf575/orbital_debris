@@ -32,7 +32,7 @@ def probability_calc(df):
     Converts inclination from degrees to radians for calculation with
     math library.
     """
-    a0 = 408 + 6371
+    a0 = 300 + 6378
     df = semimajor_calc(df)
 
     a = df['SemiMajorAxis']
