@@ -4,7 +4,6 @@ Performs Various Calculations from pulled data in data_processing
 
 import data_processing as dp
 import math
-import pandas as pd
 import numpy as np
 
 
@@ -27,6 +26,12 @@ def semimajor_calc(df):
 
 
 def probability_calc(df):
+    """
+    Performs probability calculation for every satelllite in dataset.
+    Throws out evaluations that return NaN.
+    Converts inclination from degrees to radians for calculation with
+    math library.
+    """
     a0 = 408 + 6371
     df = semimajor_calc(df)
 

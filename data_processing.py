@@ -3,7 +3,6 @@ put 2-line element data from a txt file into a pandas data frame
 should remove excess whitespace from words
 """
 import pandas as pd
-import numpy as np
 
 
 def process_data(file_name):
