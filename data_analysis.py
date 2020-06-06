@@ -172,8 +172,8 @@ def get_orbit_tally(data, orbit, pre = True):
 
 def main():
     df = process_data('test.txt')
-    #polynomial_fit_count(df)
-    #polynomial_fit_probability(df)
+    polynomial_fit_count(df)
+    polynomial_fit_probability(df)
     get_orbit_tally(df, 'GEO')
 
 
