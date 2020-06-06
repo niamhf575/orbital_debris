@@ -3,7 +3,6 @@ Data visualizations
 to support analysis
 """
 import numpy as np
-import pandas as pd
 from data_processing import process_data
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,7 +11,8 @@ from poliastro.bodies import Earth
 from poliastro.twobody import Orbit
 from poliastro.plotting import StaticOrbitPlotter
 
-from data_analysis import get_launch_year, get_launch_year_tally, get_orbit_tally, get_launch_years_column
+from data_analysis import get_launch_year, get_launch_year_tally
+from data_analysis import get_orbit_tally, get_launch_years_column
 from calculations import get_orbit_columns
 
 
@@ -103,7 +103,7 @@ def compare_years_by_orbit(data):
     data = data.dropna()
     data_LEO = get_orbit_tally(data, 'LEO', False)
     data_MEO = get_orbit_tally(data, 'MEO', False)
-    data_GEO = get_orbit_tally(data,'GEO', False)
+    data_GEO = get_orbit_tally(data, 'GEO', False)
     data_HEO = get_orbit_tally(data, 'HighEarthOrbit', False)
     df = data_LEO.merge(data_MEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
     df = df.merge(data_GEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
@@ -130,7 +130,7 @@ def compare_years_by_orbit(data):
     geo = len(data[data['GEO']])
     heo = len(data[data['HighEarthOrbit']])
     y = np.arange(4)
-    x = [leo,meo,geo,heo]
+    x = [leo, meo, geo, heo]
     plt.bar(y, x)
     fig.savefig('visualizations/orbit_bar.png')
     # third plot

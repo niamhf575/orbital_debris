@@ -1,7 +1,7 @@
 """
 This file contains our main data analysis,
 including polynomial fit functions for
-count and probability 
+count and probability
 """
 import numpy as np
 import pandas as pd
@@ -94,7 +94,7 @@ def polynomial_fit_count(data):
     res = y - count_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res',ax=ax)
+    df.plot(kind='scatter', x='x', y='res', ax=ax)
     fig.savefig('count_residuals.png')
 
 
@@ -102,7 +102,7 @@ def get_probability_tally(data):
     '''
     input is a dataframe
     returns a dataframe with columns
-    'LaunchYear', 'Probabilty' (total probability 
+    'LaunchYear', 'Probabilty' (total probability
     of impact for that year),
     '''
     data = probability_calc(data)
@@ -153,10 +153,10 @@ def polynomial_fit_probability(data):
     # something
 
 
-def get_orbit_tally(data, orbit, pre = True):
+def get_orbit_tally(data, orbit, pre=True):
     """
     set pre = False if you already added orbit columns to data
-    tallys up the count of objects per year in orbit 
+    tallys up the count of objects per year in orbit
     returns a dataframe w/ columns orbit (containing counts)
     and 'LaunchYear', orbit may be LEO, MEO, GEO or HighEarthOrbit
     """
@@ -169,6 +169,7 @@ def get_orbit_tally(data, orbit, pre = True):
     for i in range(1, len(data)):
         data.loc[i, orbit] += data.loc[i-1, orbit]
     return data
+
 
 def main():
     df = process_data('test.txt')
