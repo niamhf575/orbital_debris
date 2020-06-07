@@ -5,12 +5,10 @@ to support analysis
 import numpy as np
 from data_processing import process_data
 import matplotlib.pyplot as plt
-import seaborn as sns
 from astropy import units as u
 from poliastro.bodies import Earth
 from poliastro.twobody import Orbit
 from poliastro.plotting import StaticOrbitPlotter
-
 from data_analysis import get_launch_year, get_launch_year_tally
 from data_analysis import get_orbit_tally, get_launch_years_column
 from calculations import get_orbit_columns
@@ -38,7 +36,7 @@ def bar_plot_LEO(data):
 def total_line_and_scatter_plot_LEO(data):
     '''
     takes a dataframe from process_data
-    creates line and bar plots for the 
+    creates line and bar plots for the
     total count of objects present per year
     (for LEO)
     '''
@@ -54,14 +52,14 @@ def total_line_and_scatter_plot_LEO(data):
     plt.title("Orbital Debris Total Count Over Time (LEO)")
     plt.xlabel('Year')
     plt.ylabel('Count')
-    plt.savefig('visualizations/total_count_over_years_scatter.png', figsize=(17, 10))
+    plt.savefig('visualizations/total_count_scatter.png', figsize=(17, 10))
 
 
 def total_bar_stacked_LEO(data):
     '''
     from a dataframe of orbital data
-    creates a stacked bar chart that shows 
-    the total count of objects per year 
+    creates a stacked bar chart that shows
+    the total count of objects per year
     highlighting the increase each year in
     a different color
     (for LEO)
@@ -83,12 +81,10 @@ def orbit_plot():
     """This function plots the boundaries of Low Earth Orbit (LEO), Medium Earth
     Orbit (MEO), Geosyncronous Orbit (GEO) and High Earth Orbit.
     """
-
     # LEO boundary
     LEO_orb = Orbit.circular(Earth, alt=2000 * u.km)
     # MEO boundary
     MEO_orb = Orbit.circular(Earth, alt=35786 * u.km)
-
     fig, ax = plt.subplots(figsize=(17, 10))
     op = StaticOrbitPlotter(ax)
     op.plot(LEO_orb, label='LEO/MEO Boundary')
@@ -99,7 +95,7 @@ def orbit_plot():
 
 def compare_years_by_orbit(data):
     """
-    takes a dataframe of orbital debris data and adds columns 
+    takes a dataframe of orbital debris data and adds columns
     with information about orbits. Creates three visualizations:
     1. A set of four bar graphs showing objects per year by orbit
     2. A bar graph showing total count per orbit
@@ -114,16 +110,22 @@ def compare_years_by_orbit(data):
     data_MEO = get_orbit_tally(data, 'MEO', False)
     data_GEO = get_orbit_tally(data, 'GEO', False)
     data_HEO = get_orbit_tally(data, 'HighEarthOrbit', False)
-    df = data_LEO.merge(data_MEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
-    df = df.merge(data_GEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
-    df = df.merge(data_HEO, left_on='LaunchYear', right_on='LaunchYear', how='outer')
+    df = data_LEO.merge(data_MEO, left_on='LaunchYear',
+                        right_on='LaunchYear', how='outer')
+    df = df.merge(data_GEO, left_on='LaunchYear',
+                  right_on='LaunchYear', how='outer')
+    df = df.merge(data_HEO, left_on='LaunchYear',
+                  right_on='LaunchYear', how='outer')
     df = df.fillna(0)
     # first plot
-    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4 , figsize=(17, 30), subplot_kw={'ylim': (0,16000)}) 
-    df.plot(kind='bar', y='LEO', x='LaunchYear', ax = ax1, color="#0f4c81")
-    df.plot(kind='bar', y='MEO', x='LaunchYear', ax = ax2, color="#0f4c81")
-    df.plot(kind='bar', y='GEO', x='LaunchYear', ax = ax3, color="#0f4c81")
-    df.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax = ax4, color="#0f4c81")
+    fig, [ax1, ax2, ax3, ax4] = plt.subplots(4, figsize=(17, 30),
+                                             subplot_kw={'ylim': (0, 16000)})
+    df.plot(kind='bar', y='LEO', x='LaunchYear',
+                          ax=ax1, color="#0f4c81")
+    df.plot(kind='bar', y='MEO', x='LaunchYear', ax=ax2, color="#0f4c81")
+    df.plot(kind='bar', y='GEO', x='LaunchYear', ax=ax3, color="#0f4c81")
+    df.plot(kind='bar', y='HighEarthOrbit',
+            x='LaunchYear', ax=ax4, color="#0f4c81")
     ax1.set_title('LEO')
     ax2.set_title('MEO')
     ax3.set_title('GEO')
@@ -133,7 +135,6 @@ def compare_years_by_orbit(data):
     fig.savefig('visualizations/orbit_years_comp.png')
     # second plot
     fig, ax = plt.subplots(1)
-    total = len(data)
     leo = len(data[data['LEO']])
     meo = len(data[data['MEO']])
     geo = len(data[data['GEO']])
@@ -144,10 +145,11 @@ def compare_years_by_orbit(data):
     fig.savefig('visualizations/orbit_bar.png')
     # third plot
     fig, ax = plt.subplots(1, figsize=(17, 10))
-    df['HighEarthOrbit'] = df['LEO'] + df['MEO'] + df['GEO'] + df['HighEarthOrbit']
+    df['HighEarthOrbit'] += (df['LEO'] + df['MEO'] + df['GEO'])
     df['GEO'] = df['LEO'] + df['MEO'] + df['GEO']
-    df['MEO'] =df['LEO'] + df['MEO']
-    df.plot(y='HighEarthOrbit', x='LaunchYear', kind='bar', color="#ffa372", ax=ax)
+    df['MEO'] = df['LEO'] + df['MEO']
+    df.plot(y='HighEarthOrbit', x='LaunchYear',
+            kind='bar', color="#ffa372", ax=ax)
     df.plot(y='GEO', x='LaunchYear', kind='bar', color="#ed6663", ax=ax)
     df.plot(y='MEO', x='LaunchYear', kind='bar', color="#3282b8", ax=ax)
     df.plot(y='LEO', x='LaunchYear', kind='bar', color="#0f4c81", ax=ax)
@@ -159,18 +161,18 @@ def compare_years_by_orbit(data):
 
 def compare_by_alt(data):
     """
-    takes a dataframe of orbital debris data and adds columns 
+    takes a dataframe of orbital debris data and adds columns
     with information about orbits. Creates a scatter plot of
     altitude vs launch year
     """
     data = get_launch_years_column(data)
     data = get_orbit_columns(data)
-    data.plot(kind='scatter', x='LaunchYear', y='Apoapsis', figsize=(7, 5), color="#0f4c81")
+    data.plot(kind='scatter', x='LaunchYear', y='Apoapsis',
+              figsize=(7, 5), color="#0f4c81")
     plt.title("Altitude vs Year Launched")
     plt.xlabel('Launch Year')
     plt.ylabel('Altitude (km)')
     plt.savefig('visualizations/alt_vs_launch_year.png')
-    
 
 
 def main():
