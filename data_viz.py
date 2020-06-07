@@ -16,55 +16,64 @@ from data_analysis import get_orbit_tally, get_launch_years_column
 from calculations import get_orbit_columns
 
 
-def bar_plot(data):
+def bar_plot_LEO(data):
     """
     takes a dataframe from process_data and creates a
     bar plot for count by launch year from dataframe
+    (for LEO)
     """
+    data = get_orbit_columns(data)
+    data = data[data['LEO']]
     data = data['InternationalDesignator']
     data = data.dropna()
     data = data.apply(get_launch_year)
     data = data.groupby(data).count()
-    data.plot(kind='bar', figsize=(17, 10))
-    plt.title("Orbital Debris Count Increase Per Year")
+    data.plot(kind='bar', figsize=(17, 10), color='#0f4c81')
+    plt.title("Orbital Debris Count Increase Per Year (LEO)")
     plt.xlabel('Launch Year')
     plt.ylabel('Count')
     plt.savefig('visualizations/count_by_launch_year.png')
 
 
-def total_line_and_scatter_plot(data):
+def total_line_and_scatter_plot_LEO(data):
     '''
     takes a dataframe from process_data
     creates line and bar plots for the 
     total count of objects present per year
+    (for LEO)
     '''
+    data = get_orbit_columns(data)
+    data = data[data['LEO']]
     data = get_launch_year_tally(data)
-    data.plot(kind='line', x='Year', y='Total')
-    plt.title("Orbital Debris Total Count Over Time")
+    data.plot(kind='line', x='Year', y='Total', color='#0f4c81')
+    plt.title("Orbital Debris Total Count Over Time (LEO)")
     plt.xlabel('Year')
     plt.ylabel('Count')
     plt.savefig('visualizations/total_count_over_years_line.png')
-    data.plot(kind='scatter', x='Year', y='Total')
-    plt.title("Orbital Debris Total Count Over Time")
+    data.plot(kind='scatter', x='Year', y='Total', color='#0f4c81')
+    plt.title("Orbital Debris Total Count Over Time (LEO)")
     plt.xlabel('Year')
     plt.ylabel('Count')
     plt.savefig('visualizations/total_count_over_years_scatter.png', figsize=(17, 10))
 
 
-def total_bar_stacked(data):
+def total_bar_stacked_LEO(data):
     '''
     from a dataframe of orbital data
     creates a stacked bar chart that shows 
     the total count of objects per year 
     highlighting the increase each year in
     a different color
+    (for LEO)
     '''
+    data = get_orbit_columns(data)
+    data = data[data['LEO']]
     data = get_launch_year_tally(data)
     data['PrevSum'] = data['Total'] - data['Count']
     fig, ax = plt.subplots(1, figsize=(17, 10))
-    data.plot(y='Total', x='Year', kind='bar', color="blue", ax=ax)
-    data.plot(y='PrevSum', x='Year', kind='bar', color="lightgreen", ax=ax)
-    plt.title("Orbital Debris Total Count Over Time")
+    data.plot(y='Total', x='Year', kind='bar', color="#ed6663", ax=ax)
+    data.plot(y='PrevSum', x='Year', kind='bar', color="#0f4c81", ax=ax)
+    plt.title("Orbital Debris Total Count Over Time (LEO)")
     plt.xlabel('Year')
     plt.ylabel('Count')
     fig.savefig('visualizations/stacked_bar_count.png')
@@ -111,10 +120,10 @@ def compare_years_by_orbit(data):
     df = df.fillna(0)
     # first plot
     fig, [ax1, ax2, ax3, ax4] = plt.subplots(4 , figsize=(17, 30), subplot_kw={'ylim': (0,16000)}) 
-    df.plot(kind='bar', y='LEO', x='LaunchYear', ax = ax1)
-    df.plot(kind='bar', y='MEO', x='LaunchYear', ax = ax2)
-    df.plot(kind='bar', y='GEO', x='LaunchYear', ax = ax3)
-    df.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax = ax4)
+    df.plot(kind='bar', y='LEO', x='LaunchYear', ax = ax1, color="#0f4c81")
+    df.plot(kind='bar', y='MEO', x='LaunchYear', ax = ax2, color="#0f4c81")
+    df.plot(kind='bar', y='GEO', x='LaunchYear', ax = ax3, color="#0f4c81")
+    df.plot(kind='bar', y='HighEarthOrbit', x='LaunchYear', ax = ax4, color="#0f4c81")
     ax1.set_title('LEO')
     ax2.set_title('MEO')
     ax3.set_title('GEO')
@@ -138,10 +147,10 @@ def compare_years_by_orbit(data):
     df['HighEarthOrbit'] = df['LEO'] + df['MEO'] + df['GEO'] + df['HighEarthOrbit']
     df['GEO'] = df['LEO'] + df['MEO'] + df['GEO']
     df['MEO'] =df['LEO'] + df['MEO']
-    df.plot(y='HighEarthOrbit', x='LaunchYear', kind='bar', color="blue", ax=ax)
-    df.plot(y='GEO', x='LaunchYear', kind='bar', color="lightgreen", ax=ax)
-    df.plot(y='MEO', x='LaunchYear', kind='bar', color="green", ax=ax)
-    df.plot(y='LEO', x='LaunchYear', kind='bar', color="lightblue", ax=ax)
+    df.plot(y='HighEarthOrbit', x='LaunchYear', kind='bar', color="#ffa372", ax=ax)
+    df.plot(y='GEO', x='LaunchYear', kind='bar', color="#ed6663", ax=ax)
+    df.plot(y='MEO', x='LaunchYear', kind='bar', color="#3282b8", ax=ax)
+    df.plot(y='LEO', x='LaunchYear', kind='bar', color="#0f4c81", ax=ax)
     plt.title("Orbital Debris Total Count Over Time, by Orbit")
     plt.xlabel('Year')
     plt.ylabel('Count')
@@ -156,7 +165,7 @@ def compare_by_alt(data):
     """
     data = get_launch_years_column(data)
     data = get_orbit_columns(data)
-    data.plot(kind='scatter', x='LaunchYear', y='Apoapsis', figsize=(7, 5))
+    data.plot(kind='scatter', x='LaunchYear', y='Apoapsis', figsize=(7, 5), color="#0f4c81")
     plt.title("Altitude vs Year Launched")
     plt.xlabel('Launch Year')
     plt.ylabel('Altitude (km)')
@@ -166,9 +175,9 @@ def compare_by_alt(data):
 
 def main():
     data = process_data('test.txt')
-    bar_plot(data)
-    total_line_and_scatter_plot(data)
-    total_bar_stacked(data)
+    bar_plot_LEO(data)
+    total_line_and_scatter_plot_LEO(data)
+    total_bar_stacked_LEO(data)
     orbit_plot()
     compare_years_by_orbit(data)
     compare_by_alt(data)
