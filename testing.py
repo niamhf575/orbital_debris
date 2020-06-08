@@ -1,7 +1,9 @@
+"""
+tests for functions
+"""
 import data_analysis
 import calculations as calcs
 from data_processing import process_data
-# import data_viz
 from utils import assert_equals
 import pandas as pd
 
@@ -64,15 +66,18 @@ def test_calcs(data_file):
     assert_equals(0.000000302, relevant['Probability'])
 
 
-''''def test_get_orbit_tally():
+def test_get_orbit_tally():
+    """
+    tests get_orbit_tally from data_analysis.py
+    """
+    data = {'LaunchYear': [2002, 2002, 2001, 2003, 1967, 1967, 1991],
+            'LEO': [True, True, False, True, False, True, False]}
+    headers = ['LaunchYear', 'LEO']
 
-    data = {'InternationalDesignator':['02','02', '01', '03', '67', '67', '91'], 'LEO': [True,True,False,True,False,True,False]}
-    headers = ['InternationalDesignator', 'LEO']
-
-    data = pd.DataFrame(data, columns = headers)
-    #data = data_analysis.get_orbit_tally(data, 'LEO')
+    data = pd.DataFrame(data, columns=headers)
+    data = data_analysis.get_orbit_tally(data, 'LEO', False)
     print(data)
-    #assert_equals([2,1,1], list(data['LEO']))''''
+    assert_equals([1, 3, 4], list(data['LEO']))
 
 
 def main():

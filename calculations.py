@@ -46,14 +46,7 @@ def probability_calc(df):
 
     U = df['U']
     Ux = df['Ux']
-    # print(U)
-    # print(Ux)
-    # print(a0/a)
-    # print(a*(1-e**2)/a0)
-    # print(a.min())
     df['Probability'] = U / (2 * math.pi ** 2 * a ** 1.5 * Ux * np.sin(i))
-    # print(df['Probability'])
-    # print(df.dropna())
     return df.dropna()
 
 

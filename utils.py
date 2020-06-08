@@ -1,6 +1,9 @@
+"""
+The utils functions copied from
+our homework assignments to be used
+for testing
+"""
 import math
-
-import pandas as pd
 
 
 def check_approx_equals(expected, received):

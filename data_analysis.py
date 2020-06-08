@@ -72,6 +72,8 @@ def polynomial_fit_count(data):
     plot of the residuals.
     """
     # get the data in the right format
+    data = get_orbit_columns(data)
+    data = data[data['LEO']]
     data = get_launch_year_tally(data)
     x = np.array(list(data['Year']))
     y = np.array(list(data['Total']))
@@ -79,10 +81,12 @@ def polynomial_fit_count(data):
     count_func = np.poly1d(np.polyfit(x, y, 2))
     # plot the scatter plot & line of best fit
     fig, ax = plt.subplots(1)
-    plt.scatter(x, y)
     line = np.linspace(1958, 2020, 18000)
-    plt.scatter(x, y)
-    plt.plot(line, count_func(line))
+    plt.scatter(x, y, color='#ffa372')
+    plt.plot(line, count_func(line), color='#0f4c81')
+    plt.title("Polynomial Model of Count Per Year (LEO)")
+    plt.xlabel('Year')
+    plt.ylabel('Count')
     fig.savefig('poly_fit_count.png')
     # print some information about the model
     print('Polynomial fit for number of objects:')
@@ -94,7 +98,10 @@ def polynomial_fit_count(data):
     res = y - count_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res', ax=ax)
+    df.plot(kind='scatter', x='x', y='res', ax=ax, color='#0f4c81')
+    plt.title("Object Count Model Residuals")
+    plt.xlabel('Year')
+    plt.ylabel('Error')
     fig.savefig('count_residuals.png')
 
 
@@ -125,6 +132,8 @@ def polynomial_fit_probability(data):
     plot of the residuals.
     """
     # get the data in the right format
+    data = get_orbit_columns(data)
+    data = data[data['LEO']]
     data = get_probability_tally(data)
     x = np.array(list(data['LaunchYear']))
     y = np.array(list(data['Probability']))
@@ -133,12 +142,14 @@ def polynomial_fit_probability(data):
     # plot the scatter plot & line of best fit
     # plt.scatter(x, y)
     fig, ax = plt.subplots(1)
-    plt.scatter(x, y, color='lightblue')
+    plt.scatter(x, y, color='#ffa372')
     line = np.linspace(1963, 2020, 6)
-    plt.plot(line, prob_func(line))
-    plt.title('Probability of Collision Over Time')
+    # m = (line*0) + (1/10000)
+    plt.plot(line, prob_func(line), color='#0f4c81')
+    # plt.plot(line, m, color='red')
+    plt.title("Polynomial Model of Probability of Impact Per Year (LEO)")
     plt.xlabel('Year')
-    plt.ylabel('Probability')
+    plt.ylabel('Count')
     fig.savefig('poly_fit_probability.png')
     # print some information about the model
     print()
@@ -151,7 +162,10 @@ def polynomial_fit_probability(data):
     res = y - prob_func(x)
     d = {'x': x, 'res': res}
     df = pd.DataFrame(d)
-    df.plot(kind='scatter', x='x', y='res', ax=ax)
+    df.plot(kind='scatter', x='x', y='res', ax=ax, color='#0f4c81')
+    plt.title("Probability Model Residuals")
+    plt.xlabel('Year')
+    plt.ylabel('Error')
     fig.savefig('probability_residuals.png')
     # something
 
@@ -176,7 +190,7 @@ def get_orbit_tally(data, orbit, pre=True):
 
 def main():
     df = process_data('test.txt')
-    # polynomial_fit_count(df)
+    polynomial_fit_count(df)
     polynomial_fit_probability(df)
     get_orbit_tally(df, 'GEO')
 
