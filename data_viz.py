@@ -97,7 +97,7 @@ def orbit_plot():
     fig, ax = plt.subplots(figsize=(17, 10))
     op = StaticOrbitPlotter(ax)
     op.plot(LEO_orb, label='LEO/MEO Boundary')
-    op.plot(MEO_orb, label='MEO/GEO Boundary')
+    op.plot(MEO_orb, label='GEO Orbit & MEO/HEO Boundary')
     ax.set_title('Geocentric Orbit Boundaries')
     plt.savefig('orbit_fig.png')
 
@@ -176,8 +176,8 @@ def main():
     '''line_plot(data)
     bar_plot(data)
     total_line_and_scatter_plot(data)
-    total_bar_stacked(data)
-    # orbit_plot()'''
+    total_bar_stacked(data)'''
+    orbit_plot()
     # compare_years_by_orbit(data)
     compare_by_alt(data)
 
