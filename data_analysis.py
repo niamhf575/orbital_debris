@@ -136,6 +136,9 @@ def polynomial_fit_probability(data):
     plt.scatter(x, y, color='lightblue')
     line = np.linspace(1963, 2020, 6)
     plt.plot(line, prob_func(line))
+    plt.title('Probability of Collision Over Time')
+    plt.xlabel('Year')
+    plt.ylabel('Probability')
     fig.savefig('poly_fit_probability.png')
     # print some information about the model
     print()
@@ -174,7 +177,7 @@ def get_orbit_tally(data, orbit, pre=True):
 def main():
     df = process_data('test.txt')
     # polynomial_fit_count(df)
-    # polynomial_fit_probability(df)
+    polynomial_fit_probability(df)
     get_orbit_tally(df, 'GEO')
 
 
